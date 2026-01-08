@@ -4,20 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('first_name')->nullable()->after('name');
-            $table->string('last_name')->nullable()->after('first_name');
-            $table->enum('gender', ['Laki-laki', 'Perempuan'])->nullable()->after('last_name');
-            $table->string('phone')->nullable()->after('gender');
-            $table->text('address')->nullable()->after('phone');
-            $table->string('profile_picture')->nullable()->after('address');
+        Schema::table('pengguna', function (Blueprint $table) {
+            $table->string('nama_depan')->nullable()->after('nama');
+            $table->string('nama_belakang')->nullable()->after('nama_depan');
+            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan'])->nullable()->after('nama_belakang');
+            $table->string('telepon')->nullable()->after('jenis_kelamin');
+            $table->text('alamat')->nullable()->after('telepon');
+            $table->string('foto_profil')->nullable()->after('alamat');
         });
     }
 
@@ -26,8 +25,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['first_name', 'last_name', 'gender', 'phone', 'address', 'profile_picture']);
+        Schema::table('pengguna', function (Blueprint $table) {
+            $table->dropColumn(['nama_depan', 'nama_belakang', 'jenis_kelamin', 'telepon', 'alamat', 'foto_profil']);
         });
     }
 };

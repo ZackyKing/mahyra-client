@@ -9,9 +9,11 @@ use App\Http\Controllers\RegisterController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/layanan', [ServiceController::class, 'index'])->name('services');
+Route::get('/layanan/{id}', [ServiceController::class, 'show'])->name('service.detail');
 
 Route::get('/reservasi', [ReservationController::class, 'create'])->name('reservasi');
 Route::post('/reservasi', [ReservationController::class, 'store']);
+Route::get('/reservasi/sukses', [ReservationController::class, 'success'])->name('reservasi.success');
 
 Route::get('/daftar', [RegisterController::class, 'show'])->name('register');
 Route::post('/daftar', [RegisterController::class, 'store'])->name('register.store');

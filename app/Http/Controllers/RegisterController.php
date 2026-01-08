@@ -18,15 +18,15 @@ class RegisterController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:pengguna,email'],
             'password' => ['required', 'confirmed', Password::defaults()],
             'terms' => ['required', 'accepted'],
         ]);
 
         User::create([
-            'name' => $request->name,
+            'nama' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'kata_sandi' => Hash::make($request->password),
         ]);
 
         return redirect()->route('home')->with('success', 'Akun berhasil dibuat! Silakan login.');

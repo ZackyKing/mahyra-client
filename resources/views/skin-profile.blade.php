@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil Kulit - MAHYRA Aestetic Clinic</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Nobile:wght@400;500;700&display=swap" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -35,6 +36,7 @@
         }
     </style>
 </head>
+
 <body class="font-sans text-brand-dark antialiased overflow-x-hidden">
 
     @include('partials.navbar')
@@ -50,7 +52,8 @@
                     <p class="text-gray-600 text-lg">Beritahu Kami Tentang Kulit Anda.</p>
                 </div>
 
-                <form method="POST" action="{{ route('skin-profile.store') }}" x-data="{ selectedType: '', selectedColor: '', selectedProblems: [] }">
+                <form method="POST" action="{{ route('skin-profile.store') }}"
+                    x-data="{ selectedType: '', selectedColor: '', selectedProblems: [] }">
                     @csrf
 
                     <!-- Section 1: Skin Type -->
@@ -58,27 +61,39 @@
                         <div class="flex items-center gap-2 mb-6">
                             <h2 class="text-xl font-bold text-black">Apa Jenis Kulit Anda?</h2>
                             <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
                             </svg>
                         </div>
-                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 justify-items-center">
                             @php
                                 $skinTypes = [
-                                    'kering' => ['label' => 'Kering', 'color' => 'bg-amber-800'],
-                                    'normal' => ['label' => 'Normal', 'color' => 'bg-amber-300'],
-                                    'berminyak' => ['label' => 'Berminyak', 'color' => 'bg-amber-100'],
-                                    'kombinasi' => ['label' => 'Kombinasi', 'color' => 'bg-pink-200'],
-                                    'berjerawat' => ['label' => 'Berjerawat', 'color' => 'bg-amber-50'],
+                                    'kering' => ['label' => 'Kering', 'image' => 'Kering.png'],
+                                    'normal' => ['label' => 'Normal', 'image' => 'Normal.png'],
+                                    'berminyak' => ['label' => 'Berminyak', 'image' => 'Berminyak.png'],
+                                    'kombinasi' => ['label' => 'Kombinasi', 'image' => 'Kombinasi.png'],
+                                    'berjerawat' => ['label' => 'Berjerawat', 'image' => 'Berjerawat.png'],
                                 ];
                             @endphp
                             @foreach($skinTypes as $key => $type)
-                            <label class="cursor-pointer">
-                                <input type="radio" name="skin_type" value="{{ $key }}" x-model="selectedType" class="hidden peer" required>
-                                <div class="flex flex-col items-center p-4 border-2 border-gray-200 rounded-xl hover:border-pink-300 peer-checked:border-brand-btn-dark peer-checked:bg-pink-50 transition">
-                                    <div class="w-16 h-16 rounded-full {{ $type['color'] }} mb-2"></div>
-                                    <span class="text-sm font-medium text-center">{{ $type['label'] }}</span>
-                                </div>
-                            </label>
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="skin_type" value="{{ $key }}" x-model="selectedType"
+                                        class="hidden peer" required>
+                                    <div
+                                        class="relative w-24 h-24 rounded-full overflow-hidden border-4 border-transparent peer-checked:border-brand-teal transition-all transform hover:scale-105">
+                                        <img src="{{ asset('img/' . $type['image']) }}" alt="{{ $type['label'] }}"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black/10">
+                                            <span
+                                                class="text-white font-medium text-sm drop-shadow-md">{{ $type['label'] }}</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                        <div class="w-2 h-2 bg-brand-teal rounded-full"></div>
+                                    </div>
+                                </label>
                             @endforeach
                         </div>
                         @error('skin_type')
@@ -91,25 +106,37 @@
                         <div class="flex items-center gap-2 mb-6">
                             <h2 class="text-xl font-bold text-black">Apa Warna Kulit Anda?</h2>
                             <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
                             </svg>
                         </div>
-                        <div class="grid grid-cols-3 gap-4">
+                        <div class="flex justify-center gap-8">
                             @php
                                 $skinColors = [
-                                    'terang' => ['label' => 'Terang', 'color' => 'bg-amber-50'],
-                                    'sedang' => ['label' => 'Sedang', 'color' => 'bg-amber-200'],
-                                    'gelap' => ['label' => 'Gelap', 'color' => 'bg-amber-600'],
+                                    'terang' => ['label' => 'Terang', 'image' => 'Terang.png'],
+                                    'sedang' => ['label' => 'Sedang', 'image' => 'Sedang.png'],
+                                    'gelap' => ['label' => 'Gelap', 'image' => 'Gelap.png'],
                                 ];
                             @endphp
                             @foreach($skinColors as $key => $color)
-                            <label class="cursor-pointer">
-                                <input type="radio" name="skin_color" value="{{ $key }}" x-model="selectedColor" class="hidden peer" required>
-                                <div class="flex flex-col items-center p-4 border-2 border-gray-200 rounded-xl hover:border-pink-300 peer-checked:border-brand-btn-dark peer-checked:bg-pink-50 transition">
-                                    <div class="w-16 h-16 rounded-full {{ $color['color'] }} mb-2"></div>
-                                    <span class="text-sm font-medium text-center">{{ $color['label'] }}</span>
-                                </div>
-                            </label>
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="skin_color" value="{{ $key }}" x-model="selectedColor"
+                                        class="hidden peer" required>
+                                    <div
+                                        class="relative w-24 h-24 rounded-full overflow-hidden border-4 border-transparent peer-checked:border-brand-teal transition-all transform hover:scale-105">
+                                        <img src="{{ asset('img/' . $color['image']) }}" alt="{{ $color['label'] }}"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black/10">
+                                            <span
+                                                class="text-white font-medium text-lg drop-shadow-md">{{ $color['label'] }}</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                        <div class="w-2 h-2 bg-brand-teal rounded-full"></div>
+                                    </div>
+                                </label>
                             @endforeach
                         </div>
                         @error('skin_color')
@@ -122,35 +149,39 @@
                         <div class="flex items-center gap-2 mb-6">
                             <h2 class="text-xl font-bold text-black">Apa Masalah Kulit Anda?</h2>
                             <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
                             </svg>
                         </div>
-                        <div class="grid grid-cols-3 md:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 justify-items-center">
                             @php
                                 $skinProblems = [
-                                    'bekas_jerawat' => 'Bekas Jerawat',
-                                    'komedo' => 'Komedo Hitam/Putih',
-                                    'mata_panda' => 'Mata Panda',
-                                    'kulit_kusam' => 'Kulit Kusam',
-                                    'hiperpigmentasi' => 'Hiperpigmentasi',
-                                    'kulit_kasar' => 'Kulit Kasar',
-                                    'pori_besar' => 'Pori-pori Besar',
-                                    'kulit_sensitif' => 'Kulit Sensitif',
-                                    'keriput' => 'Keriput',
+                                    'bekas_jerawat' => ['label' => 'Bekas Jerawat', 'image' => 'Bekas Jerawat.png'],
+                                    'komedo' => ['label' => 'Komedo Hitam/Putih', 'image' => 'Komedo HitamPutih.png'],
+                                    'mata_panda' => ['label' => 'Mata Panda', 'image' => 'Mata Panda.png'],
+                                    'kulit_kusam' => ['label' => 'Kulit Kusam', 'image' => 'Kulit Kusam.png'],
+                                    'hiperpigmentasi' => ['label' => 'Hiperpigmentasi', 'image' => 'HyperPigmentation.png'],
+                                    'kulit_kasar' => ['label' => 'Kulit Kasar', 'image' => 'Kulit Kasar.png'],
+                                    'pori_besar' => ['label' => 'Pori-pori Besar', 'image' => 'Pori-pori Besar.png'],
+                                    'kulit_sensitif' => ['label' => 'Kulit Sensitif', 'image' => 'Kulit Sensitive.png'],
+                                    'keriput' => ['label' => 'Keriput', 'image' => 'Keriput.png'],
                                 ];
                             @endphp
                             @foreach($skinProblems as $key => $problem)
-                            <label class="cursor-pointer">
-                                <input type="checkbox" name="skin_problems[]" value="{{ $key }}" x-model="selectedProblems" class="hidden peer">
-                                <div class="flex flex-col items-center p-4 border-2 border-gray-200 rounded-xl hover:border-pink-300 peer-checked:border-brand-btn-dark peer-checked:bg-pink-50 transition">
-                                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 mb-2 flex items-center justify-center">
-                                        <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                        </svg>
+                                <label class="cursor-pointer group w-24">
+                                    <input type="checkbox" name="skin_problems[]" value="{{ $key }}"
+                                        x-model="selectedProblems" class="hidden peer">
+                                    <div class="flex flex-col items-center">
+                                        <div
+                                            class="w-20 h-20 rounded-full overflow-hidden border-2 border-transparent peer-checked:border-brand-teal transition-all mb-2 shadow-sm">
+                                            <img src="{{ asset('img/' . $problem['image']) }}" alt="{{ $problem['label'] }}"
+                                                class="w-full h-full object-cover">
+                                        </div>
+                                        <span
+                                            class="text-xs font-medium text-center text-gray-700 leading-tight group-hover:text-brand-teal transition-colors">{{ $problem['label'] }}</span>
                                     </div>
-                                    <span class="text-xs font-medium text-center leading-tight">{{ $problem }}</span>
-                                </div>
-                            </label>
+                                </label>
                             @endforeach
                         </div>
                         @error('skin_problems')
@@ -160,7 +191,8 @@
 
                     <!-- Submit Button -->
                     <div class="mt-8">
-                        <button type="submit" class="w-full px-6 py-4 bg-brand-btn-dark text-white rounded-lg font-bold text-lg hover:bg-gray-800 transition">
+                        <button type="submit"
+                            class="w-full px-6 py-4 bg-brand-btn-dark text-white rounded-lg font-bold text-lg hover:bg-gray-800 transition">
                             Mulailah Perjalanan Mu!
                         </button>
                     </div>
@@ -176,5 +208,5 @@
     </div>
 
 </body>
-</html>
 
+</html>

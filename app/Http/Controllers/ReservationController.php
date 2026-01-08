@@ -82,10 +82,45 @@ class ReservationController extends Controller
             'phone' => ['required', 'string', 'max:20'],
         ]);
 
-        // Here you would save the reservation to the database
-        // For now, just redirect to reservation history with success message
-        
-        return redirect()->route('reservation-history')->with('success', 'Reservasi berhasil dibuat!');
+        // Get treatment details
+        $treatments = [
+            1 => ['title' => 'Mencerahkan Wajah', 'price' => 'Rp 350.000', 'duration' => '75 Menit'],
+            2 => ['title' => 'Perawatan Kulit Jerawat', 'price' => 'Rp 300.000', 'duration' => '60 Menit'],
+            3 => ['title' => 'Perawatan Anti Penuaan', 'price' => 'Rp 500.000', 'duration' => '90 Menit'],
+            4 => ['title' => 'Injeksi Botox', 'price' => 'Rp 850.000', 'duration' => '45 Menit'],
+            5 => ['title' => 'Perawatan Filler', 'price' => 'Rp 950.000', 'duration' => '60 Menit'],
+            6 => ['title' => 'Pencerahan Badan', 'price' => 'Rp 450.000', 'duration' => '120 Menit'],
+        ];
+
+        $treatmentId = (int) $validated['treatment_id'];
+        $treatment = $treatments[$treatmentId] ?? ['title' => 'Perawatan', 'price' => 'Rp 0', 'duration' => '0 Menit'];
+
+        // Store reservation data in session for success page
+        session([
+            'reservation' => [
+                'treatment' => $treatment['title'],
+                'price' => $treatment['price'],
+                'duration' => $treatment['duration'],
+                'date' => $validated['date'],
+                'time' => $validated['time'],
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+            ]
+        ]);
+
+        // Here you would also save the reservation to the database
+
+        return redirect()->route('reservasi.success');
+    }
+
+    public function success()
+    {
+        if (!session('reservation')) {
+            return redirect()->route('services');
+        }
+
+        return view('reservation-success');
     }
 }
 

@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'admin@admin.com'],
             [
-                'name' => 'Admin',
+                'nama' => 'Admin',
                 'email' => 'admin@admin.com',
-                'password' => \Illuminate\Support\Facades\Hash::make('admin'),
+                'kata_sandi' => \Illuminate\Support\Facades\Hash::make('admin'),
             ]
         );
 
@@ -30,9 +30,9 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'admin'],
             [
-                'name' => 'Admin',
+                'nama' => 'Admin',
                 'email' => 'admin',
-                'password' => \Illuminate\Support\Facades\Hash::make('admin'),
+                'kata_sandi' => \Illuminate\Support\Facades\Hash::make('admin'),
             ]
         );
     }

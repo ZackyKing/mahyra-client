@@ -18,7 +18,7 @@ class LoginController extends Controller
         // Allow "admin" as email for testing
         $email = $request->input('email');
         $isAdminEmail = ($email === 'admin' || $email === 'admin@admin.com');
-        
+
         $rules = [
             'email' => ['required', 'string'],
             'password' => ['required', 'string'],
@@ -33,8 +33,8 @@ class LoginController extends Controller
 
         // Try to find user by email (handles both "admin" and "admin@admin.com")
         $user = \App\Models\User::where('email', $credentials['email'])->first();
-        
-        if ($user && \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
+
+        if ($user && \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->kata_sandi)) {
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
             return redirect()->intended(route('home'));

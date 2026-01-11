@@ -33,8 +33,7 @@ Route::put('/edit-akun', [App\Http\Controllers\EditAccountController::class, 'up
 Route::get('/riwayat', [App\Http\Controllers\ReservationHistoryController::class, 'index'])->name('reservation-history');
 Route::delete('/riwayat/{id}', [App\Http\Controllers\ReservationHistoryController::class, 'cancel'])->name('reservation-history.cancel');
 
-Route::get('/dokter', [App\Http\Controllers\DoctorController::class, 'index'])->name('doctors');
-Route::get('/dokter/{id}', [App\Http\Controllers\DoctorController::class, 'show'])->name('doctor.show');
+Route::get('/dokter', [App\Http\Controllers\DoctorController::class, 'show'])->name('doctor');
 
 Route::get('/konsultasi', [App\Http\Controllers\ConsultationController::class, 'index'])->name('consultation');
 Route::post('/konsultasi', [App\Http\Controllers\ConsultationController::class, 'store'])->name('consultation.store');

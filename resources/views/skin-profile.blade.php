@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Nobile:wght@400;500;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -34,6 +33,18 @@
             background: linear-gradient(to bottom, #FFF0F0 0%, #FFFFFF 100%);
             min-height: 100vh;
         }
+        /* Custom styles for radio selection - using pure CSS */
+        .skin-option input[type="radio"]:checked + .skin-circle {
+            border-color: #ec4899 !important;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3) !important;
+        }
+        .skin-option input[type="radio"]:checked ~ .skin-dot {
+            opacity: 1 !important;
+        }
+        .skin-problem-option input[type="radio"]:checked + .skin-problem-container .skin-problem-circle {
+            border-color: #ec4899 !important;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3) !important;
+        }
     </style>
 </head>
 
@@ -52,8 +63,7 @@
                     <p class="text-gray-600 text-lg">Beritahu Kami Tentang Kulit Anda.</p>
                 </div>
 
-                <form method="POST" action="{{ route('skin-profile.store') }}"
-                    x-data="{ selectedType: '', selectedColor: '', selectedProblems: [] }">
+                <form method="POST" action="{{ route('skin-profile.store') }}">
                     @csrf
 
                     <!-- Section 1: Skin Type -->
@@ -77,21 +87,19 @@
                                 ];
                             @endphp
                             @foreach($skinTypes as $key => $type)
-                                <label class="cursor-pointer group relative">
-                                    <input type="radio" name="skin_type" value="{{ $key }}" x-model="selectedType"
-                                        class="hidden peer" required>
-                                    <div
-                                        class="relative w-24 h-24 rounded-full overflow-hidden border-4 border-transparent peer-checked:border-brand-teal transition-all transform hover:scale-105">
+                                <label class="skin-option cursor-pointer group relative">
+                                    <input type="radio" name="skin_type" value="{{ $key }}" 
+                                        {{ ($user->jenis_kulit ?? '') === $key ? 'checked' : '' }}
+                                        class="hidden" required>
+                                    <div class="skin-circle relative w-24 h-24 rounded-full overflow-hidden border-4 border-gray-200 transition-all transform hover:scale-105">
                                         <img src="{{ asset('img/' . $type['image']) }}" alt="{{ $type['label'] }}"
                                             class="w-full h-full object-cover">
-                                        <div class="absolute inset-0 flex items-center justify-center bg-black/10">
-                                            <span
-                                                class="text-white font-medium text-sm drop-shadow-md">{{ $type['label'] }}</span>
+                                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent py-2">
+                                            <span class="block text-white font-medium text-xs text-center drop-shadow-md">{{ $type['label'] }}</span>
                                         </div>
                                     </div>
-                                    <div
-                                        class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 peer-checked:opacity-100 transition-opacity">
-                                        <div class="w-2 h-2 bg-brand-teal rounded-full"></div>
+                                    <div class="skin-dot absolute -bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity">
+                                        <div class="w-2 h-2 bg-pink-500 rounded-full"></div>
                                     </div>
                                 </label>
                             @endforeach
@@ -120,21 +128,19 @@
                                 ];
                             @endphp
                             @foreach($skinColors as $key => $color)
-                                <label class="cursor-pointer group relative">
-                                    <input type="radio" name="skin_color" value="{{ $key }}" x-model="selectedColor"
-                                        class="hidden peer" required>
-                                    <div
-                                        class="relative w-24 h-24 rounded-full overflow-hidden border-4 border-transparent peer-checked:border-brand-teal transition-all transform hover:scale-105">
+                                <label class="skin-option cursor-pointer group relative">
+                                    <input type="radio" name="skin_color" value="{{ $key }}"
+                                        {{ ($user->warna_kulit ?? '') === $key ? 'checked' : '' }}
+                                        class="hidden" required>
+                                    <div class="skin-circle relative w-24 h-24 rounded-full overflow-hidden border-4 border-gray-200 transition-all transform hover:scale-105">
                                         <img src="{{ asset('img/' . $color['image']) }}" alt="{{ $color['label'] }}"
                                             class="w-full h-full object-cover">
-                                        <div class="absolute inset-0 flex items-center justify-center bg-black/10">
-                                            <span
-                                                class="text-white font-medium text-lg drop-shadow-md">{{ $color['label'] }}</span>
+                                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent py-2">
+                                            <span class="block text-white font-medium text-sm text-center drop-shadow-md">{{ $color['label'] }}</span>
                                         </div>
                                     </div>
-                                    <div
-                                        class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 peer-checked:opacity-100 transition-opacity">
-                                        <div class="w-2 h-2 bg-brand-teal rounded-full"></div>
+                                    <div class="skin-dot absolute -bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity">
+                                        <div class="w-2 h-2 bg-pink-500 rounded-full"></div>
                                     </div>
                                 </label>
                             @endforeach
@@ -169,22 +175,21 @@
                                 ];
                             @endphp
                             @foreach($skinProblems as $key => $problem)
-                                <label class="cursor-pointer group w-24">
-                                    <input type="checkbox" name="skin_problems[]" value="{{ $key }}"
-                                        x-model="selectedProblems" class="hidden peer">
-                                    <div class="flex flex-col items-center">
-                                        <div
-                                            class="w-20 h-20 rounded-full overflow-hidden border-2 border-transparent peer-checked:border-brand-teal transition-all mb-2 shadow-sm">
+                                <label class="skin-problem-option cursor-pointer group w-24">
+                                    <input type="radio" name="skin_problem" value="{{ $key }}"
+                                        {{ ($user->masalah_kulit ?? '') === $key ? 'checked' : '' }}
+                                        class="hidden" required>
+                                    <div class="skin-problem-container flex flex-col items-center">
+                                        <div class="skin-problem-circle w-20 h-20 rounded-full overflow-hidden border-4 border-gray-200 transition-all mb-2 shadow-sm">
                                             <img src="{{ asset('img/' . $problem['image']) }}" alt="{{ $problem['label'] }}"
                                                 class="w-full h-full object-cover">
                                         </div>
-                                        <span
-                                            class="text-xs font-medium text-center text-gray-700 leading-tight group-hover:text-brand-teal transition-colors">{{ $problem['label'] }}</span>
+                                        <span class="text-xs font-medium text-center text-gray-700 leading-tight group-hover:text-pink-500 transition-colors">{{ $problem['label'] }}</span>
                                     </div>
                                 </label>
                             @endforeach
                         </div>
-                        @error('skin_problems')
+                        @error('skin_problem')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>

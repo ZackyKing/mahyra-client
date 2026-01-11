@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
@@ -23,13 +24,18 @@ class RegisterController extends Controller
             'terms' => ['required', 'accepted'],
         ]);
 
-        User::create([
+        $user = User::create([
             'nama' => $request->name,
             'email' => $request->email,
             'kata_sandi' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('home')->with('success', 'Akun berhasil dibuat! Silakan login.');
+        // Auto login user after registration
+        Auth::login($user);
+
+        // Redirect to skin profile page to complete registration
+        return redirect()->route('skin-profile')->with('success', 'Akun berhasil dibuat! Silakan lengkapi profil kulit Anda.');
     }
 }
+
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reservasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,39 +14,23 @@ class ReservationHistoryController extends Controller
             return redirect()->route('login');
         }
 
-        // Dummy data for reservations
-        $reservations = [
-            [
-                'id' => 1,
-                'treatment' => 'Mencerahkan Wajah',
-                'date' => '07/11/2025',
-                'time' => '10:00',
-                'status' => 'Dikonfirmasi',
-                'status_color' => 'bg-blue-400',
-                'price' => 'Rp 350.000',
-                'can_cancel' => true,
-            ],
-            [
-                'id' => 2,
-                'treatment' => 'Perawatan Jerawat',
-                'date' => '07/11/2025',
-                'time' => '11:00',
-                'status' => 'Selesai',
-                'status_color' => 'bg-green-400',
-                'price' => 'Rp 300.000',
-                'can_cancel' => false,
-            ],
-            [
-                'id' => 3,
-                'treatment' => 'Facial Treatment',
-                'date' => '08/11/2025',
-                'time' => '14:00',
-                'status' => 'Menunggu',
-                'status_color' => 'bg-yellow-500',
-                'price' => 'Rp 400.000',
-                'can_cancel' => true,
-            ],
-        ];
+        // Get user's reservations from database
+        $reservations = Reservasi::where('id_pengguna', Auth::id())
+            ->orderBy('tanggal', 'desc')
+            ->orderBy('waktu', 'desc')
+            ->get()
+            ->map(function ($reservasi) {
+                return [
+                    'id' => $reservasi->id,
+                    'treatment' => $reservasi->nama_perawatan,
+                    'date' => $reservasi->tanggal->format('d/m/Y'),
+                    'time' => $reservasi->waktu,
+                    'status' => $reservasi->status_display,
+                    'status_color' => $reservasi->status_color,
+                    'price' => $reservasi->formatted_price,
+                    'can_cancel' => $reservasi->can_cancel,
+                ];
+            });
 
         return view('reservation-history', compact('reservations'));
     }
@@ -56,10 +41,20 @@ class ReservationHistoryController extends Controller
             return redirect()->route('login');
         }
 
-        // Here you would cancel the reservation in the database
-        // For now, just redirect back with success message
-        
+        $reservasi = Reservasi::where('id', $id)
+            ->where('id_pengguna', Auth::id())
+            ->first();
+
+        if (!$reservasi) {
+            return redirect()->route('reservation-history')->with('error', 'Reservasi tidak ditemukan.');
+        }
+
+        if (!$reservasi->can_cancel) {
+            return redirect()->route('reservation-history')->with('error', 'Reservasi tidak dapat dibatalkan.');
+        }
+
+        $reservasi->update(['status' => 'dibatalkan']);
+
         return redirect()->route('reservation-history')->with('success', 'Reservasi berhasil dibatalkan.');
     }
 }
-

@@ -8,23 +8,32 @@
         </div>
 
         <div class="hidden lg:flex space-x-8 text-sm font-medium text-gray-700">
-            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Beranda</a>
-            <a href="{{ route('services') }}" class="{{ request()->routeIs('services') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Layanan</a>
-            <a href="{{ route('doctors') }}" class="{{ request()->routeIs('doctors') || request()->routeIs('doctor.show') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Dokter</a>
-            <a href="{{ route('reservasi') }}" class="{{ request()->routeIs('reservasi') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Reservasi</a>
-            <a href="{{ route('consultation') }}" class="{{ request()->routeIs('consultation') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Konsultasi</a>
-            <a href="{{ route('faq') }}" class="{{ request()->routeIs('faq') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Tanya</a>
+            <a href="{{ route('home') }}"
+                class="{{ request()->routeIs('home') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Beranda</a>
+            <a href="{{ route('services') }}"
+                class="{{ request()->routeIs('services') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Layanan</a>
+            <a href="{{ route('doctor') }}"
+                class="{{ request()->routeIs('doctor') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Dokter</a>
+            <a href="{{ route('reservasi') }}"
+                class="{{ request()->routeIs('reservasi') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Reservasi</a>
+            <a href="{{ route('consultation') }}"
+                class="{{ request()->routeIs('consultation') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Konsultasi</a>
+            <a href="{{ route('faq') }}"
+                class="{{ request()->routeIs('faq') ? 'text-brand-dark font-semibold' : 'hover:text-gray-500 transition' }}">Tanya</a>
         </div>
 
         <div class="hidden md:flex items-center space-x-3">
             @auth
-                <a href="{{ route('reservation-history') }}" class="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition text-gray-700 {{ request()->routeIs('reservation-history') ? 'border-brand-btn-dark' : '' }}">Riwayat</a>
-                <a href="{{ route('profile') }}" class="px-6 py-2 bg-brand-btn-dark text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition">Profil</a>
+                <a href="{{ route('reservation-history') }}"
+                    class="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition text-gray-700 {{ request()->routeIs('reservation-history') ? 'border-brand-btn-dark' : '' }}">Riwayat</a>
+                <a href="{{ route('profile') }}"
+                    class="px-6 py-2 bg-brand-btn-dark text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition">Profil</a>
             @else
-                <a href="{{ route('login') }}" class="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition text-gray-700">Login</a>
-                <a href="{{ route('register') }}" class="px-6 py-2 bg-brand-btn-dark text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition">Daftar</a>
+                <a href="{{ route('login') }}"
+                    class="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition text-gray-700">Login</a>
+                <a href="{{ route('register') }}"
+                    class="px-6 py-2 bg-brand-btn-dark text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition">Daftar</a>
             @endauth
         </div>
     </div>
 </nav>
-

@@ -2,64 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reservasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
+    /**
+     * Treatment data
+     */
+    private $treatments = [
+        1 => ['title' => 'Mencerahkan Wajah', 'price' => 350000, 'duration' => '75 Menit', 'icon' => 'face'],
+        2 => ['title' => 'Perawatan Jerawat', 'price' => 300000, 'duration' => '60 Menit', 'icon' => 'acne'],
+        3 => ['title' => 'Perawatan Anti Penuaan', 'price' => 500000, 'duration' => '90 Menit', 'icon' => 'anti-aging'],
+        4 => ['title' => 'Injeksi Botox', 'price' => 850000, 'duration' => '45 Menit', 'icon' => 'syringe'],
+        5 => ['title' => 'Perawatan Filler', 'price' => 950000, 'duration' => '60 Menit', 'icon' => 'syringe'],
+        6 => ['title' => 'Pencerah Badan', 'price' => 450000, 'duration' => '120 Menit', 'icon' => 'body'],
+        7 => ['title' => 'Masker Wajah', 'price' => 100000, 'duration' => '30 Menit', 'icon' => 'mask'],
+        8 => ['title' => 'Perawatan Komedo', 'price' => 100000, 'duration' => '45 Menit', 'icon' => 'komedo'],
+    ];
+
     public function create(Request $request)
     {
-        // All available treatments
-        $treatments = [
-            [
-                'id' => 1,
-                'title' => 'Mencerahkan Wajah',
-                'price' => 'Rp 350.000',
-                'icon' => 'face',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Perawatan Jerawat',
-                'price' => 'Rp 300.000',
-                'icon' => 'acne',
-            ],
-            [
-                'id' => 3,
-                'title' => 'Perawatan Anti Penuaan',
-                'price' => 'Rp 500.000',
-                'icon' => 'anti-aging',
-            ],
-            [
-                'id' => 4,
-                'title' => 'Injeksi Botox',
-                'price' => 'Rp 850.000',
-                'icon' => 'syringe',
-            ],
-            [
-                'id' => 5,
-                'title' => 'Perawatan Filler',
-                'price' => 'Rp 950.000',
-                'icon' => 'syringe',
-            ],
-            [
-                'id' => 6,
-                'title' => 'Pencerah Badan',
-                'price' => 'Rp 450.000',
-                'icon' => 'body',
-            ],
-            [
-                'id' => 7,
-                'title' => 'Masker Wajah',
-                'price' => 'Rp 100.000',
-                'icon' => 'mask',
-            ],
-            [
-                'id' => 8,
-                'title' => 'Perawatan Komedo',
-                'price' => 'Rp 100.000',
-                'icon' => 'komedo',
-            ],
-        ];
+        // Format treatments for view
+        $treatments = [];
+        foreach ($this->treatments as $id => $treatment) {
+            $treatments[] = [
+                'id' => $id,
+                'title' => $treatment['title'],
+                'price' => 'Rp ' . number_format($treatment['price'], 0, ',', '.'),
+                'icon' => $treatment['icon'],
+            ];
+        }
 
         // Available time slots
         $timeSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
@@ -82,24 +56,32 @@ class ReservationController extends Controller
             'phone' => ['required', 'string', 'max:20'],
         ]);
 
-        // Get treatment details
-        $treatments = [
-            1 => ['title' => 'Mencerahkan Wajah', 'price' => 'Rp 350.000', 'duration' => '75 Menit'],
-            2 => ['title' => 'Perawatan Kulit Jerawat', 'price' => 'Rp 300.000', 'duration' => '60 Menit'],
-            3 => ['title' => 'Perawatan Anti Penuaan', 'price' => 'Rp 500.000', 'duration' => '90 Menit'],
-            4 => ['title' => 'Injeksi Botox', 'price' => 'Rp 850.000', 'duration' => '45 Menit'],
-            5 => ['title' => 'Perawatan Filler', 'price' => 'Rp 950.000', 'duration' => '60 Menit'],
-            6 => ['title' => 'Pencerahan Badan', 'price' => 'Rp 450.000', 'duration' => '120 Menit'],
-        ];
-
         $treatmentId = (int) $validated['treatment_id'];
-        $treatment = $treatments[$treatmentId] ?? ['title' => 'Perawatan', 'price' => 'Rp 0', 'duration' => '0 Menit'];
+        $treatment = $this->treatments[$treatmentId] ?? null;
+
+        if (!$treatment) {
+            return back()->withErrors(['treatment_id' => 'Perawatan tidak valid.']);
+        }
+
+        // Save reservation to database
+        $reservasi = Reservasi::create([
+            'id_pengguna' => Auth::id(),
+            'nama_perawatan' => $treatment['title'],
+            'harga' => $treatment['price'],
+            'tanggal' => $validated['date'],
+            'waktu' => $validated['time'],
+            'status' => 'menunggu',
+            'nama_pelanggan' => $validated['name'],
+            'email_pelanggan' => $validated['email'],
+            'telepon_pelanggan' => $validated['phone'],
+        ]);
 
         // Store reservation data in session for success page
         session([
             'reservation' => [
+                'id' => $reservasi->id,
                 'treatment' => $treatment['title'],
-                'price' => $treatment['price'],
+                'price' => 'Rp ' . number_format($treatment['price'], 0, ',', '.'),
                 'duration' => $treatment['duration'],
                 'date' => $validated['date'],
                 'time' => $validated['time'],
@@ -108,8 +90,6 @@ class ReservationController extends Controller
                 'phone' => $validated['phone'],
             ]
         ]);
-
-        // Here you would also save the reservation to the database
 
         return redirect()->route('reservasi.success');
     }
@@ -123,4 +103,3 @@ class ReservationController extends Controller
         return view('reservation-success');
     }
 }
-

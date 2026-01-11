@@ -325,9 +325,6 @@
                 <!-- About -->
                 <div>
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 flex items-center justify-center text-2xl font-serif font-bold text-brand-dark">
-                            <span class="text-3xl">M</span>
-                        </div>
                         <div>
                             <div class="font-serif font-bold text-xl text-brand-dark">MAHYRA</div>
                             <div class="text-xs text-gray-600 font-sans">Aestetic Clinic</div>

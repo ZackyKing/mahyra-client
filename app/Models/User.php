@@ -41,6 +41,9 @@ class User extends Authenticatable
         'telepon',
         'alamat',
         'foto_profil',
+        'jenis_kulit',
+        'warna_kulit',
+        'masalah_kulit',
     ];
 
     /**

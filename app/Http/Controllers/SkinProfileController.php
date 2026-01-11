@@ -12,7 +12,7 @@ class SkinProfileController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        
+
         $user = Auth::user();
         return view('skin-profile', compact('user'));
     }
@@ -24,18 +24,23 @@ class SkinProfileController extends Controller
         }
 
         $validated = $request->validate([
-            'skin_type' => ['required', 'string'],
-            'skin_color' => ['required', 'string'],
-            'skin_problems' => ['required', 'array'],
-            'skin_problems.*' => ['string'],
+            'skin_type' => ['required', 'string', 'in:kering,normal,berminyak,kombinasi,berjerawat'],
+            'skin_color' => ['required', 'string', 'in:terang,sedang,gelap'],
+            'skin_problem' => ['required', 'string', 'in:bekas_jerawat,komedo,mata_panda,kulit_kusam,hiperpigmentasi,kulit_kasar,pori_besar,kulit_sensitif,keriput'],
         ], [
-            'skin_problems.required' => 'Pilih setidaknya satu masalah kulit.',
+            'skin_problem.required' => 'Pilih satu masalah kulit.',
         ]);
 
-        // Here you can save the skin profile data to database
-        // For now, we'll just redirect back with success message
-        
+        $user = Auth::user();
+
+        // Save skin profile data to database using Indonesian column names
+        $user->jenis_kulit = $validated['skin_type'];
+        $user->warna_kulit = $validated['skin_color'];
+        $user->masalah_kulit = $validated['skin_problem'];
+        $user->save();
+
         return redirect()->route('profile')->with('success', 'Profil kulit Anda berhasil disimpan!');
     }
 }
+
 

@@ -21,7 +21,7 @@ class DoctorController extends Controller
         return view('doctors', compact('doctors'));
     }
 
-    public function show($id)
+    public function show()
     {
         // Data dokter sesuai desain baru
         $doctor = [

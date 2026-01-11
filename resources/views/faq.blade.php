@@ -44,7 +44,7 @@
         <div class="max-w-4xl mx-auto">
             <!-- Title Section -->
             <div class="text-center mb-12">
-                <h1 class="text-6xl lg:text-7xl font-bold mb-4 text-purple-800">
+                <h1 class="text-6xl lg:text-7xl font-bold mb-4 text-black">
                     TANYA ?
                 </h1>
                 <h2 class="text-2xl lg:text-3xl font-bold mb-2 text-gray-800">Pertanyaan yang Sering Diajukan</h2>

@@ -17,7 +17,8 @@ class Konsultasi extends Model
      */
     protected $fillable = [
         'id_pengguna',
-        'pertanyaan',
+        'pengirim',
+        'pesan',
     ];
 
     /**

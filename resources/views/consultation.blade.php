@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Konsultasi - MAHYRA Aestetic Clinic</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Nobile:wght@400;500;700&display=swap" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -35,6 +36,7 @@
         }
     </style>
 </head>
+
 <body class="font-sans text-brand-dark antialiased overflow-x-hidden">
 
     @include('partials.navbar')
@@ -54,44 +56,49 @@
                 </div>
 
                 <!-- Chat Messages Area -->
-                <div class="h-[500px] overflow-y-auto p-6 space-y-4 bg-gray-50">
+                <div id="chat-messages" class="h-[500px] overflow-y-auto p-6 space-y-4 bg-gray-50">
                     @foreach($messages as $msg)
-                        @if($msg['sender'] === 'clinic')
-                        <!-- Clinic Message (Left) -->
-                        <div class="flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-200 to-pink-300 flex items-center justify-center flex-shrink-0">
-                                <img src="{{ asset('img/logo.png') }}" alt="Clinic" class="w-6 h-6 object-contain">
-                            </div>
-                            <div class="flex-1">
-                                <div class="bg-brand-btn-dark text-white rounded-2xl rounded-tl-sm px-4 py-3 max-w-md">
-                                    <p class="text-sm">{{ $msg['message'] }}</p>
+                        @if($msg['sender'] === 'bot')
+                            <!-- Bot Message (Left) -->
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-200 to-pink-300 flex items-center justify-center flex-shrink-0">
+                                    <img src="{{ asset('img/logo.png') }}" alt="Clinic" class="w-6 h-6 object-contain">
                                 </div>
-                                <p class="text-xs text-gray-500 mt-1 ml-2">{{ $msg['time'] }}</p>
-                            </div>
-                        </div>
-                        @else
-                        <!-- User Message (Right) -->
-                        <div class="flex items-start gap-3 justify-end">
-                            <div class="flex-1 flex justify-end">
-                                <div class="max-w-md">
-                                    <div class="bg-brand-btn-dark text-white rounded-2xl rounded-tr-sm px-4 py-3">
+                                <div class="flex-1">
+                                    <div class="bg-brand-btn-dark text-white rounded-2xl rounded-tl-sm px-4 py-3 max-w-md">
                                         <p class="text-sm">{{ $msg['message'] }}</p>
                                     </div>
-                                    <p class="text-xs text-gray-500 mt-1 mr-2 text-right">{{ $msg['time'] }}</p>
+                                    <p class="text-xs text-gray-500 mt-1 ml-2">{{ $msg['time'] }}</p>
                                 </div>
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-200 to-pink-300 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                                @if(Auth::check() && Auth::user()->profile_picture)
-                                    <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="User" class="w-full h-full object-cover">
-                                @elseif(Auth::check() && Auth::user()->name)
-                                    <span class="text-xs font-bold text-white">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                                @else
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                @endif
+                        @else
+                            <!-- User Message (Right) -->
+                            <div class="flex items-start gap-3 justify-end">
+                                <div class="flex-1 flex justify-end">
+                                    <div class="max-w-md">
+                                        <div class="bg-brand-btn-dark text-white rounded-2xl rounded-tr-sm px-4 py-3">
+                                            <p class="text-sm">{{ $msg['message'] }}</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1 mr-2 text-right">{{ $msg['time'] }}</p>
+                                    </div>
+                                </div>
+                                <div
+                                    class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-200 to-pink-300 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                    @if(Auth::check() && Auth::user()->foto_profil)
+                                        <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="User"
+                                            class="w-full h-full object-cover">
+                                    @elseif(Auth::check() && Auth::user()->nama)
+                                        <span
+                                            class="text-xs font-bold text-white">{{ strtoupper(substr(Auth::user()->nama, 0, 1)) }}</span>
+                                    @else
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        </svg>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
                         @endif
                     @endforeach
                 </div>
@@ -101,40 +108,39 @@
                     <form method="POST" action="{{ route('consultation.store') }}" class="flex items-center gap-3">
                         @csrf
                         <!-- Attachment Button -->
-                        <button type="button" class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition flex-shrink-0">
+                        <button type="button"
+                            class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition flex-shrink-0">
                             <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4"></path>
                             </svg>
                         </button>
-                        
+
                         <!-- Message Input -->
-                        <input 
-                            type="text" 
-                            name="message" 
-                            placeholder="Pesan.." 
-                            required
-                            class="flex-1 px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-200 focus:border-pink-300 outline-none transition"
-                        >
-                        
+                        <input type="text" name="message" placeholder="Pesan.." required
+                            class="flex-1 px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-200 focus:border-pink-300 outline-none transition">
+
                         <!-- Send Button -->
-                        <button 
-                            type="submit" 
-                            class="px-6 py-3 bg-brand-btn-dark text-white rounded-lg font-medium hover:bg-gray-800 transition"
-                        >
+                        <button type="submit"
+                            class="px-6 py-3 bg-brand-btn-dark text-white rounded-lg font-medium hover:bg-gray-800 transition">
                             Kirim
                         </button>
                     </form>
                 </div>
             </div>
-
-            @if(session('success'))
-                <div class="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-sm text-center">
-                    {{ session('success') }}
-                </div>
-            @endif
         </div>
     </div>
 
-</body>
-</html>
+    <script>
+        // Auto-scroll to bottom of chat
+        document.addEventListener('DOMContentLoaded', function () {
+            const chatMessages = document.getElementById('chat-messages');
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        });
+    </script>
 
+</body>
+
+</html>

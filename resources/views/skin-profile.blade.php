@@ -59,7 +59,7 @@
             <div class="bg-white rounded-2xl p-8 shadow-xl">
                 <!-- Greeting -->
                 <div class="mb-8">
-                    <h1 class="text-3xl font-bold mb-2 text-black">Hallo {{ $user->name ?? 'User' }}</h1>
+                    <h1 class="text-3xl font-bold mb-2 text-black">Hallo {{ $user->nama ?? 'User' }}</h1>
                     <p class="text-gray-600 text-lg">Beritahu Kami Tentang Kulit Anda.</p>
                 </div>
 
